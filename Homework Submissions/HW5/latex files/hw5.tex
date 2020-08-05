@@ -1,0 +1,322 @@
+\documentclass[12pt,letterpaper]{article}
+%\usepackage{fullpage}
+\usepackage[top=2cm, bottom=4.5cm, left=2.5cm, right=2.5cm]{geometry}
+\usepackage{amsmath,amsthm,amsfonts,amssymb,amscd}
+%\usepackage{lastpage}
+\usepackage{enumerate}
+\usepackage{fancyhdr}
+%\usepackage{mathrsfs}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{float}
+
+\hypersetup{%
+  colorlinks=true,
+  linkcolor=blue,
+  linkbordercolor={0 0 1}
+}
+ 
+\renewcommand\lstlistingname{Code}
+\renewcommand\lstlistlistingname{Code}
+\def\lstlistingautorefname{Alg.}
+
+\lstdefinestyle{C}{
+    language        = C,
+    frame           = lines, 
+    basicstyle      = \footnotesize,
+    keywordstyle    = \color{blue},
+    stringstyle     = \color{green},
+    commentstyle    = \color{red}\ttfamily
+}
+
+\setlength{\parindent}{0.0in}
+\setlength{\parskip}{0.05in}
+
+% Edit these as appropriate
+
+\pagestyle{fancyplain}
+\headheight 35pt
+\lhead{Rahul Wankhede \\ MTech (Res), CDS}                 % <-- Comment this line out for problem sets (make sure you are person #1)
+\chead{\textbf{\Large Homework-5}}
+\rhead{DS 288 \\ Due: Oct 31st, 2019}
+\lfoot{}
+\cfoot{}
+\rfoot{\small\thepage}
+\headsep 1.5em
+
+\begin{document}
+
+\section*{Problem 1}
+\begin{align*}
+\int_{x_0}^{x_2} f(x) dx = a_0 f(x_0) + a_1 f(x_1) + a_2 f(x_2) + k f^{(4)} (\xi)
+\end{align*}
+
+Solving for $f(x) = x^n$, when n = 0, 1, and 2. We get 3 equations in 3 unknowns $a_0$, $a_1$, and $a_2$ which can be represented by the matrix:
+\begin{equation}
+\begin{bmatrix}
+       1 		& 		1	 		&  	1 \\
+       x_{0} 	& 	x_{1} 			& 	x_{2} \\
+       x_{0}^2 	& 	x_{1}^2 		& 	x_{2}^2 \\
+\end{bmatrix}
+     \cdot
+\begin{bmatrix}
+       a_{0} \\
+       a_{1} \\
+       a_{2}
+\end{bmatrix}
+     =
+\begin{bmatrix}
+       x_2 - x_0 \\
+       \frac{1}{2}(x_2^2 - x_0^2)\\
+       \frac{1}{3}(x_2^3 - x_0^3)
+\end{bmatrix}
+\end{equation}
+
+Substituting $x_1 = x_0 + h$ and $x_2 = x_0 + 2h$, we get:
+
+\begin{equation}
+\begin{bmatrix}
+       1 		& 		1	 		&  	1 \\
+       x_{0} 	& 	x_{1} 			& 	x_{2} \\
+       x_{0}^2 	& 	x_{1}^2 		& 	x_{2}^2 \\
+\end{bmatrix}
+     \cdot
+\begin{bmatrix}
+       a_{0} \\
+       a_{1} \\
+       a_{2}
+\end{bmatrix}
+     =
+\begin{bmatrix}
+       2h \\
+       2x_0 h + 2h^2\\
+       2x_0^2 h + 4x_0 h^2 + \frac{8}{3} h^3
+\end{bmatrix}
+\end{equation}
+
+
+$R_2 \leftarrow R_2 - x_0 R_1$ \qquad
+$R_3 \leftarrow R_3 - x_0^2 R_1$\qquad
+$R_3 \leftarrow R_3 - (2x_0 + h) R_2$
+
+\begin{equation}
+\begin{bmatrix}
+       1 		& 		1	 		&  	1 \\
+       0	 	& 		h 			& 	2h \\
+       0	 	& 		0	 		& 	2h^2 \\
+\end{bmatrix}
+     \cdot
+\begin{bmatrix}
+       a_{0} \\
+       a_{1} \\
+       a_{2}
+\end{bmatrix}
+     =
+\begin{bmatrix}
+       2h \\
+       2h^2\\
+       \frac{2}{3} h^3
+\end{bmatrix}
+\end{equation}
+
+
+Solving using back-substitution, we get:
+\begin{align*}
+a_0 = \frac{h}{3} \quad
+a_1 = \frac{4h}{3} \quad
+a_2 = \frac{h}{3}
+\end{align*}
+
+as we had expected.
+Now, when n = 4, i.e., $f(x) = x^4 , f^{(4)}(x) = f^{(4)}(\xi(x)) = 4! = 24$. So,
+
+\begin{align}
+\int_{x_0}^{x_2} x^4 dx = \dfrac{h}{3} [x_0^4 + 4 x_1^4 + x_2^4] + 24k
+\end{align}
+Solving for k, we get:
+\begin{align}
+\dfrac{x^5}{5} \Biggr|_{x_0}^{x_0 + 2h} &= \frac{h}{3}[1 \cdot x_0^4 + 4 \cdot (x_0 + h)^4 + 1 \cdot (x_0 + 2h)^4] + 24k
+\end{align}
+
+We can put $x_0 = 0$ for simplification to get:
+\begin{align*}
+\dfrac{(2h)^5}{5} &= \frac{h}{3}[0 + 4h^4 + (2h)^4] + 24k\\
+\dfrac{32h^5}{5} &= \frac{20}{3}h^5 + 24k\\
+k &= -\dfrac{h^5}{90}
+\end{align*}
+
+
+
+
+
+\newpage
+
+\section*{Problem 2}
+
+\subsection*{Romberg Integration}
+
+\subsubsection*{a) $f(x) = x^{1/3}$}
+
+\begin{center}
+\begin{tabular}{l*{6}{c}r}
+\hline
+n 	& Function evaluations 	&	Result 		& Trapezoidal Result 	\\
+12	& 2049					&	0.749995	& 0.749989 \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsubsection*{b) $f(x) = x^2e^{-x}$}
+
+\begin{center}
+\begin{tabular}{l*{6}{c}r}
+\hline
+n 	& Function evaluations 	&	Result 		& Trapezoidal Result 	\\
+4	& 9						&	0.160602	& 0.161080 				\\
+\hline
+\end{tabular}
+\end{center}
+
+
+\section*{Problem 3}
+
+\subsection*{Gaussian Quadrature}
+
+\subsubsection*{a) $f(x) = x^{1/3}$} 
+
+Results for different values of n:
+
+\begin{center}
+\begin{tabular}{l*{6}{c}r}
+\hline
+Function evaluations 	    & n = 2 	& n = 3 		& n = 4 		& n = 5\\
+Result	 		& 0.75977 	& 0.75385	 	& 0.75194 		& 0.75113\\
+\hline
+Romberg Result	& 0.69580	& 0.73063		& 0.74250		& 0.74704	\\
+Romberg evaluations 		&	3			&	5		&	9		& 17 \\
+\hline
+\end{tabular}
+\end{center}
+
+
+\subsubsection*{b) $f(x) = x^2e^{-x}$}
+
+Results for different values of n:
+
+\begin{center}
+\begin{tabular}{l*{6}{c}r}
+\hline
+Function evaluations	   	& n = 2 		& n = 3 	& n = 4 	& n = 5\\
+Result	 		& 0.159410 	& 0.160595	 	& 0.160602 		& 0.160602\\
+\hline
+Romberg Result	& 0.162401	& 0.160610		& 0.160602		&	-		\\
+Romberg evaluations 		&	3			&	5		&	9		& 17 \\
+\hline
+\end{tabular}
+\end{center}
+
+Comparing the results, we can see that Gaussian outperforms Romberg in terms of accuracy, and in terms of the number of function evaluations required, it does even better (we could say exponentially better).
+
+\newpage
+
+\section*{Problem 4}
+\begin{equation*}
+\dfrac{dy}{dt} = \dfrac{1}{t^2} - \dfrac{y}{t} - y^2 \qquad (1 \leq t \leq 2) \qquad y(1) = -1
+\end{equation*}
+
+\subsection*{Euler's method}
+
+The different plots for different values of n (step size $\Delta t = 0.1(2^{-n})$) are as follows:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=.3\textwidth]{"../images/euler_n=0"}\hfill
+\includegraphics[width=.3\textwidth]{"../images/euler_n=1"}\hfill
+\includegraphics[width=.3\textwidth]{"../images/euler_n=2"}\\
+
+\includegraphics[width=.5\textwidth]{"../images/euler_n=3"}\hfill
+\includegraphics[width=.5\textwidth]{"../images/euler_n=4"}\\
+
+\caption{Euler's method for different values of n}
+\end{figure}
+
+The values calculated for different n are given in the table (actual value is -0.5):
+
+\begin{center}
+\begin{tabular}{c c c}
+\hline
+n	&		y(2)	&	Absolute error\\
+\hline
+0	&	-0.4431		&	0.0569\\
+1	&	-0.4712		&	0.0288\\
+2	&	-0.4855		&	0.0145\\
+3	&	-0.4927		&	0.0073\\
+4	&	-0.4964		&	0.0036\\
+\hline
+\end{tabular}
+\end{center}
+
+\newpage
+
+\subsection*{Modified Euler's method}
+
+The different plots for different values of n (step size $\Delta t = 0.1(2^{-n})$) are as follows:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=.3\textwidth]{"../images/mod_euler_n=0"}\hfill
+\includegraphics[width=.3\textwidth]{"../images/mod_euler_n=1"}\hfill
+\includegraphics[width=.3\textwidth]{"../images/mod_euler_n=2"}\\
+
+\includegraphics[width=.5\textwidth]{"../images/mod_euler_n=3"}\hfill
+\includegraphics[width=.5\textwidth]{"../images/mod_euler_n=4"}\\
+
+\caption{Modified Euler's method for different values of n}
+\end{figure}
+
+The values calculated for different n are given in the table (actual value is -0.5):
+
+\begin{center}
+\begin{tabular}{c c c}
+\hline
+n	&		y(2)	&	Absolute error\\
+\hline
+0	&	-0.49555		&	0.00445\\
+1	&	-0.49885		&	0.00115\\
+2	&	-0.49971		&	0.00029\\
+3	&	-0.49992		&	0.00008\\
+4	&	-0.49998		&	0.00002\\
+\hline
+\end{tabular}
+\end{center}
+
+Let's compare the errors side by side
+
+\begin{center}
+\begin{tabular}{c c c}
+\hline
+n	&	Error(Euler's)	&	Error(Modified Euler's)\\
+\hline
+0	&	0.0569	&	0.00445\\
+1	&	0.0288	&	0.00115\\
+2	&	0.0145	&	0.00029\\
+3	&	0.0073	&	0.00008\\
+4	&	0.0036	&	0.00002\\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{figure}[H]
+\centering
+\includegraphics{"../images/eulervsmod_euler"}
+\caption{loglog plot of $1/\Delta t$ vs Absolute error for Euler and Modified Euler's methods}
+\end{figure}
+
+As we had expected, the error in both methods decreases with decreasing step size.
+
+But, Modified Euler's performs better as it not only gives better approximation but also has a faster rate of decrease of error.
+
+
+\end{document}

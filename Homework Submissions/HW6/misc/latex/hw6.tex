@@ -1,0 +1,140 @@
+\documentclass[12pt,letterpaper]{article}
+%\usepackage{fullpage}
+\usepackage[top=2cm, bottom=4.5cm, left=2.5cm, right=2.5cm]{geometry}
+\usepackage{amsmath,amsthm,amsfonts,amssymb,amscd}
+%\usepackage{lastpage}
+\usepackage{enumerate}
+\usepackage{fancyhdr}
+%\usepackage{mathrsfs}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{float}
+
+\hypersetup{%
+  colorlinks=true,
+  linkcolor=blue,
+  linkbordercolor={0 0 1}
+}
+ 
+\renewcommand\lstlistingname{Code}
+\renewcommand\lstlistlistingname{Code}
+\def\lstlistingautorefname{Alg.}
+
+\lstdefinestyle{C}{
+    language        = C,
+    frame           = lines, 
+    basicstyle      = \footnotesize,
+    keywordstyle    = \color{blue},
+    stringstyle     = \color{green},
+    commentstyle    = \color{red}\ttfamily
+}
+
+\setlength{\parindent}{0.0in}
+\setlength{\parskip}{0.05in}
+
+% Edit these as appropriate
+
+\pagestyle{fancyplain}
+\headheight 35pt
+\lhead{Rahul Wankhede \\ MTech (Res), CDS}                 % <-- Comment this line out for problem sets (make sure you are person #1)
+\chead{\textbf{\Large Homework-6}}
+\rhead{DS 288 \\ Due: Nov 21st, 2019}
+\lfoot{}
+\cfoot{}
+\rfoot{\small\thepage}
+\headsep 1.5em
+
+\begin{document}
+
+\section*{Problem 1}
+
+I have found a time step size of 1/16 years to be appropriate for this problem. The plot is as follows:
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.7]{"../hw6_1"}
+\caption{RK-4 for h = 1/16 years}
+\end{figure}
+
+Increasing the time-step size by a factor of 2, 4, 8, and 16, we get the following plot for the relative errors at N(10) vs $h^{-1}$
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=.5\textwidth]{"../hw6_2"}\hfill
+\includegraphics[width=.5\textwidth]{"../hw6_3"}\\
+\caption{Loglog plot of Relative error vs $h^{-1}$}
+\end{figure}
+
+Plotting this with an equal aspect ratio, we can see that the graph is a straight line with slope (magnitude) approximately = 4, which is what we'd expect with the RK-4 method.
+
+
+\newpage
+
+\section*{Problem 2}
+
+The maximum allowable step sizes for the different methods are given in the table ranked in decreasing order of h(most to least stable):
+
+\begin{center}
+\begin{tabular}{c c}
+\hline
+Method						&		h\\
+\hline
+Adams Moulton				&		2.0\\
+Adams Predictor/Corrector	&		0.8\\
+Midpoint rule				&		0.66\\
+Adams Bashforth				&		0.33\\
+\hline
+\end{tabular}
+\end{center}
+
+For the predictor corrector method, the plots for different values of h are as follows:
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.65]{"../h=01"}
+\caption{h = 0.1 (Stable)}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.65]{"../h=1"}
+\caption{h = 1 (Unstable)}
+\end{figure}
+
+Another plot for h=0.3 is one which is stable but not very accurate.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.65]{"../h=03"}
+\caption{h = 0.3 (Stable but not very accurate)}
+\end{figure}
+
+The stability analysis is done by hand which I am attaching here as images:
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.55]{"../im1"}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.55]{"../im2"}
+\end{figure}
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.55]{"../im3"}
+\end{figure}
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.55]{"../im4"}
+\end{figure}
+
+
+
+\end{document}

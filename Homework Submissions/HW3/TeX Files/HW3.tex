@@ -1,0 +1,204 @@
+
+\documentclass[12pt,letterpaper]{article}
+%\usepackage{fullpage}
+\usepackage[top=2cm, bottom=4.5cm, left=2.5cm, right=2.5cm]{geometry}
+\usepackage{amsmath,amsthm,amsfonts,amssymb,amscd}
+%\usepackage{lastpage}
+\usepackage{enumerate}
+\usepackage{fancyhdr}
+%\usepackage{mathrsfs}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{hyperref}
+
+\hypersetup{%
+  colorlinks=true,
+  linkcolor=blue,
+  linkbordercolor={0 0 1}
+}
+ 
+\renewcommand\lstlistingname{Code}
+\renewcommand\lstlistlistingname{Code}
+\def\lstlistingautorefname{Alg.}
+
+\lstdefinestyle{C}{
+    language        = C,
+    frame           = lines, 
+    basicstyle      = \footnotesize,
+    keywordstyle    = \color{blue},
+    stringstyle     = \color{green},
+    commentstyle    = \color{red}\ttfamily
+}
+
+\setlength{\parindent}{0.0in}
+\setlength{\parskip}{0.05in}
+
+% Edit these as appropriate
+
+\pagestyle{fancyplain}
+\headheight 35pt
+\lhead{Rahul Wankhede \\ MTech (Res), CDS}                 % <-- Comment this line out for problem sets (make sure you are person #1)
+\chead{\textbf{\Large Homework-3}}
+\rhead{DS 288 \\ Due: Sep 24, 2019}
+\lfoot{}
+\cfoot{}
+\rfoot{\small\thepage}
+\headsep 1.5em
+
+\begin{document}
+
+\section*{Problem 1}
+
+Using Bisection method with tolerance = machine epsilon, after 49 iterations,
+
+Exact solution = \textbf{0.56714}32904097838
+
+Approximate solution = \textbf{0.56714}262
+
+Relative error = $1.182 \times 10^{-6}$
+
+
+
+    \lstset{language=C++}
+    \lstset{caption={Forward code in C}}
+    \lstset{label={lst:alg1}}
+    \begin{lstlisting}[style = C]
+	#include <stdio.h>
+	#include <stdlib.h>
+	
+	#define SIZE 11
+	
+	double * getBesselArray(int x, double * J){
+	/* function to get J_i(x) for i = 2 to 10; returns filled array
+	x = 1, 5, 50; J = pointer to first element of array */
+
+	  for (int i = 2; i < SIZE; i++){
+	    J[i] = (2 * (i-1) * J[i-1] / x) - J[i-2];
+	  }
+	  return J;
+	}
+	
+	
+	int main(){
+	
+	/* initialising first two elements with J_0 and J_1 */
+	
+	  double * J1 = malloc(sizeof(double) * SIZE);
+	  J1[0] = 0.76519, J1[1] = 0.44005;
+	
+	  double * J5 = malloc(sizeof(double) * SIZE);
+	  J5[0] = -0.17759, J5[1] = -0.32757;
+	
+	  double * J50 = malloc(sizeof(double) * SIZE);
+	  J50[0] = 0.055812, J50[1] = -0.097511;
+	
+	  J1 = getBesselArray(1, J1);
+	  J5 = getBesselArray(5, J5);
+	  J50 = getBesselArray(50, J50);
+	
+	  printf("J_10(1) = %f\n", J1[10]);
+	  printf("J_10(5) = %f\n", J5[10]);
+	  printf("J_10(50) = %f\n", J50[10]);
+	
+	  free(J1); free(J5); free(J50);
+	
+	  return 0;
+	}
+
+    \end{lstlisting}
+
+\newpage
+
+\section*{Problem 2}
+% Rest of the work...
+
+Recursion in the backward direction is given by:
+
+
+
+    
+    \lstset{language=C++}
+    \lstset{caption={Backward code in C}}
+    \lstset{label={lst:alg2}}
+    \begin{lstlisting}[style = C]
+	
+	double * getBesselArray(int x, double * J){
+	/* function to get J_i(x) for i = 8 to 0 */
+
+	  for (int i = 8; i >= 0; i--){
+	    J[i] = (2 * (i+1) * J[i+1] / x) - J[i+2];
+	  }
+	  return J;
+	}
+	
+
+    \end{lstlisting}
+
+The output is:
+
+\begin{align}
+J_{0}(1) = 0.765190 \\
+J_{0}(5) = -0.177594 \\
+J_{0}(50) = 0.055807
+\end{align}
+
+
+\begin{center}
+\begin{tabular}{l*{6}{c}r}
+\hline
+Values 	            	& x = 1 & x = 5 & x = 50\\
+\hline
+Absolute value (p) 								& $7.65197686 \times 10^{-1}$ 	& $-1.7759677131 \times 10^{-1}$ 	& $5.5812 \times 10^{-2}$  \\
+Calculated value ($p^*$)        						& $7.65190000 \times 10^{-1}$ 	& $-1.7759400000 \times 10^{-1}$	& $5.5807 \times 10^{-2}$ \\
+Absolute error ($\mid p - p^* \mid$)          				& $7.686 \times 10^{-6}$		& $2.77131 \times 10^{-6}$		& $5 \times 10^{-6}$ \\
+\hline
+Relative error ($\mid p - p^* \mid \over \mid p \mid$)    	& $1.0044 \times 10^{-5}$ 	& $1.56045 \times 10^{-5}$		& $8.9586 \times 10^{-5}$ \\
+\hline
+\end{tabular}
+\end{center}
+
+Clearly, the backward recursion has much less error than the forward one for all values of $x$ (around ${1 \over 1000}^{th}$ to ${1 \over 100}^{th}$ percentage relative error).
+
+
+\newpage
+\section*{Problem 3}
+
+Can the error propagation be formally analyzed using the difference equation analysis we performed in class? \par
+I think so. I'll try: \par
+Say there is an error in the recording of the observations $J_0(x)$ and $J_1(x), = \Delta x_0$ and $\Delta x_1$ respectively.
+Then, what we are actually calculating is: \\
+\begin{align*}
+J_n^*(x) &= \dfrac{2(n-1)}{x} [J_{n-1}(x) + \Delta x_1] - [J_{n-2}(x) + \Delta x_0] \\
+\epsilon_n & = \mid J_n(x) - J_n^*(x) \mid \\
+&= \dfrac{2(n-1)}{x} \Delta x_1 - \Delta x_0 \\
+\epsilon_{n+1} &= \dfrac{2n}{x} \epsilon_n - \epsilon_{n-1} \\
+\dfrac{\epsilon_{n+1}}{\epsilon_n} &= \dfrac{2n}{x} - \dfrac{\epsilon_{n-1}}{\epsilon_n}\\
+\end{align*}
+
+i.e., Current error rate = $2n\over x$ - Previous error rate. Let's call them $R_{n+1}$ and $R_n$ respectively,
+
+\begin{align*}
+R_{n+1} &= \dfrac{2n}{x} - R_n \\
+\dfrac{R_{n+1}}{R_n} &= \dfrac{2n}{x} - 1 \\
+\dfrac{R_{n+1}}{R_n} &\propto \dfrac{2n}{x}
+\end{align*}
+
+So, the rate of change of error rate is \emph{directly} proportional to $n$, and \emph{inversely} proportional to $x$.
+
+\newpage
+
+Can the error behavior be understood by this analysis? \par
+Yes. Since the rate of growth of error rate is \emph{directly} proportional to $n$, we can write: \\
+(if we were working with continuous data, we would write in terms of derivatives, but since we have discrete data)
+
+\begin{align*}
+\dfrac{\Delta^2 \epsilon}{\Delta^2 n} = k_1 \\
+\dfrac{\Delta \epsilon}{\Delta n} = k_1n + k_2 \\
+\epsilon = k_1 n^2 + k_2 n + k_3
+\end{align*}
+
+So, the error grows quadratically with increasing $n$; and that is why we see unconditional error growth in the case of forward recursion (since we are increasing n), but not in the case of backward recursion (decreasing n). \par
+Also, we see most error when x = 1, less when x = 5, and even less so when x = 50; since the rate of growth of error rate is \emph{inversely} proportional to x.
+
+\end{document}
